@@ -9,7 +9,7 @@ use Auth;
 use Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-// use App\Models\Comment;
+use App\Models\Comment;
 
 class PostController extends Controller
 {
@@ -98,13 +98,13 @@ class PostController extends Controller
         // return $result;
 
         // for showing posts and comments on this post using left join
-        $result =DB::table('posts')
-        ->leftJoin('comments', 'posts.id', '=', 'comments.post_id')
-        ->get();
+        // $result =DB::table('posts')
+        // ->leftJoin('comments', 'posts.id', '=', 'comments.post_id')
+        // ->get();
 
-        echo '<pre>';
-        print_r($result);
-        exit;
+
+        // return response()->json($result);
+
 
         // $post = Post::where('id', $id)->first();
         // function lastComments()
@@ -119,6 +119,29 @@ class PostController extends Controller
         // }
 
         // @endforeach
+            $n = 1;
+        // $result = Post::all();
+        // foreach($result as $value){
+        //     echo $value;
+        //     $comment=Comment::where('post_id' , $value->id )->get();
+        //     foreach($comment as $value1){
+        //         echo $value1;
+        //     }
+        // }
+
+         $result = Post::all();
+        foreach($result as $value){
+            $data[$n]['post']= $value;
+            $comment=Comment::where('post_id' , $value->id )->get();
+            $m=1;
+            foreach($comment as $value1){
+                $data[$n]['message '.$m]= $value1;
+                $m++;
+            }
+            $n++;
+        }
+        return response()->json($data);
+
 
 
     }
@@ -165,8 +188,12 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $result = Post ::find($id);
-        return $result;
+        // $result = Post ::find($id);
+        // return $result;
+
+        $data['post'] = Post::find($id);
+        $data['message'] = Comment::where('post_id' , $id )->get();
+        return response()->json($data);
     }
 
     /**

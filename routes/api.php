@@ -19,6 +19,7 @@ use App\Http\Controllers\CommentController;
 
 Route::group(['middleware'=>'api'],function($routes){
 
+
     Route::post('/register', [PostController::class, 'register']);
     Route::post('/login', [PostController::class, 'login']);
     Route::post('/profile', [PostController::class, 'profile']);
